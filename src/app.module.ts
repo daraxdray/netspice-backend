@@ -17,6 +17,13 @@ import {PostImage} from "./entities/Post/PostImage";
 import {PostCommentLike} from "./entities/Post/PostCommentLike";
 import {PostSubCommentLike} from "./entities/Post/PostSubCommentLike";
 import {MailerModule} from "@nestjs-modules/mailer";
+import { Answer } from './entities/Book/Answers';
+import { Question } from './entities/Book/Question';
+import { Page } from './entities/Book/Page';
+import { AnswerController } from './controller/answer_controller';
+import { AnswerService } from './services/answer.service';
+import { Media } from './entities/Book/Media';
+import { Book } from './entities/Book/Book';
 
 const entities = [
     Post,
@@ -26,7 +33,12 @@ const entities = [
     PostImage,
     User,
     PostCommentLike,
-    PostSubCommentLike
+    PostSubCommentLike,
+    Answer,
+    Question,
+    Media,
+    Page,
+    Book,
 ]
 
 @Module({
@@ -43,6 +55,7 @@ const entities = [
         MulterModule.register({
             dest: './upload',
         }),
+        
         TypeOrmModule.forRoot({
             type: 'mysql',
             host: process.env.DB_HOST != null ? process.env.DB_HOST : '127.0.0.1',
@@ -50,7 +63,7 @@ const entities = [
             username:
                 process.env.DB_USERNAME != null ? process.env.DB_USERNAME : 'root',
             password:
-                process.env.DB_PASSWORD != null ? process.env.DB_PASSWORD : 'passw0rd',
+                process.env.DB_PASSWORD != null ? process.env.DB_PASSWORD : '',
             database: process.env.DB_NAME || 'my-tom',
             entities: entities,
             // logging: ["query"],
@@ -76,10 +89,11 @@ const entities = [
                 from: '"MyTom System" <system@my-tom.com>',
             },
         }),
-
+        TypeOrmModule.forFeature([Page, Question, Answer,Media]),
+        
     ],
-    controllers: [PostController, UserController],
-    providers: [PostService, UserService],
+    controllers: [PostController, UserController, AnswerController],
+    providers: [PostService, UserService, AnswerService],
 })
 export class AppModule {
 }

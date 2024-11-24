@@ -12,6 +12,7 @@ import {PostSubCommentLike} from "../Post/PostSubCommentLike";
 import {PostCommentLike} from "../Post/PostCommentLike";
 import {PostComment} from "../Post/PostComment";
 import {IsAlphanumeric, IsUUID} from "class-validator";
+import { Book } from '../Book/Book';
 
 export class ReportUserDto {
     @IsUUID()
@@ -66,6 +67,9 @@ export class User {
 
     @DeleteDateColumn()
     deletedAt?: Date;
+
+    @OneToMany(() => Book, (book) => book.user)
+    books: Book[];
 
     iAmFollowing: boolean = false;
     isBlocked: boolean = false;

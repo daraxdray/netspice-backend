@@ -1,10 +1,12 @@
 import {NestFactory} from '@nestjs/core';
 import {AppModule} from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 const Sentry = require('@sentry/node');
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
     app.enableCors();
 
     Sentry.init({
@@ -21,6 +23,13 @@ async function bootstrap() {
             process.env.ENVIRONMENT != null && process.env.ENVIRONMENT == 'production'
         ),
     });
+
+    //Allows static assets accessible
+    app.useStaticAssets(join(__dirname, '..','..', 'uploads'), {
+        prefix: '/uploads/',
+      });
+  
+    
 
     await app.listen(3000);
 }
