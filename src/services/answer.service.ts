@@ -63,7 +63,7 @@ export class AnswerService {
     // Iterate through each answer provided in the DTO
     for (const answerData of createAnswersDto.answers) {
       const { questionId, content, media } = answerData;
-  
+      console.log(questionId);
       // Validate that the question exists in the database
       const question = await this.questionRepository.findOneBy({ id: questionId });
       if (!question) {
